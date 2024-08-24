@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Herbal Garden</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Include Three.js for 3D rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Virtual Herbal Garden</h1>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Explore Plants</a></li>
+                <li><a href="#">Virtual Tours</a></li>
+                <li><a href="#">About AYUSH</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Search and Filter Section -->
+        <section id="search-section">
+            <input type="text" id="search-bar" placeholder="Search for plants...">
+            <button onclick="searchPlants()">Search</button>
+        </section>
+
+        <!-- 3D Model Viewer Section -->
+        <section id="model-viewer">
+            <div id="3d-viewer-container"></div>
+            <div id="plant-details">
+                <h2>Plant Name</h2>
+                <p>Botanical Name: <span id="botanical-name">Lorem Ipsum</span></p>
+                <p>Common Names: <span id="common-names">Example, Example</span></p>
+                <p>Habitat: <span id="habitat">Tropical regions</span></p>
+                <p>Medicinal Uses: <span id="medicinal-uses">Used for digestive health</span></p>
+                <p>Methods of Cultivation: <span id="cultivation-methods">Needs well-drained soil</span></p>
+            </div>
+        </section>
+
+        <!-- Multimedia Content Section -->
+        <section id="multimedia-section">
+            <h2>Learn More About Herbal Plants</h2>
+            <div id="multimedia-content">
+                <img src="images/placeholder.jpg" alt="Plant Image" id="plant-image">
+                <video controls>
+                    <source src="videos/placeholder.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Virtual Herbal Garden. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/scripts.js"></script>
+</body>
+</html>
