@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Virtual Herbal Garden · AYUSH</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+  <!-- Decorative background blobs -->
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+
+  <!-- ───── HEADER ───── -->
+  <header id="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">🌿</span>
+        <div>
+          <span class="logo-title">Vanaspati</span>
+          <span class="logo-sub">Virtual Herbal Garden</span>
+        </div>
+      </div>
+      <nav>
+        <a href="#garden" class="nav-link active">Garden</a>
+        <a href="#about" class="nav-link">About AYUSH</a>
+        <a href="#glossary" class="nav-link">Glossary</a>
+      </nav>
+      <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Menu">☰</button>
+    </div>
+    <div id="mobile-menu" class="mobile-menu hidden">
+      <a href="#garden" onclick="toggleMenu()">Garden</a>
+      <a href="#about" onclick="toggleMenu()">About AYUSH</a>
+      <a href="#glossary" onclick="toggleMenu()">Glossary</a>
+    </div>
+  </header>
+
+  <!-- ───── HERO ───── -->
+  <section class="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow">AYUSH · Ancient Wisdom, Living Knowledge</p>
+      <h1 class="hero-title">Explore the<br><em>Healing Garden</em></h1>
+      <p class="hero-desc">Discover 5,000 years of Ayurvedic, Unani, Siddha, and Naturopathic plant wisdom through immersive 3D botanical experiences.</p>
+      <div class="hero-search">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-bar" placeholder="Search herbs, uses, or systems…" oninput="filterPlants()" />
+        <button onclick="clearSearch()" id="clear-btn" class="clear-btn hidden">✕</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">8</span><span class="stat-label">Herbs</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num">3</span><span class="stat-label">Systems</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num">5K+</span><span class="stat-label">Years of wisdom</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="floating-card fc-1">🌿 Tulsi · Adaptogen</div>
+      <div class="floating-card fc-2">🌾 Turmeric · Anti-inflammatory</div>
+      <div class="floating-card fc-3">🍃 Brahmi · Nootropic</div>
+      <div class="hero-circle">
+        <div class="hero-circle-inner" id="hero-canvas-wrap"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── FILTER BAR ───── -->
+  <section class="filter-section" id="garden">
+    <div class="filter-inner">
+      <span class="filter-label">Filter by system:</span>
+      <div class="filter-pills">
+        <button class="pill active" onclick="setFilter('all', this)">All Plants</button>
+        <button class="pill" onclick="setFilter('Ayurveda', this)">Ayurveda</button>
+        <button class="pill" onclick="setFilter('Unani', this)">Unani</button>
+        <button class="pill" onclick="setFilter('Siddha', this)">Siddha</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── PLANT GRID ───── -->
+  <section class="garden-section">
+    <div class="garden-grid" id="plant-grid"></div>
+    <p class="no-results hidden" id="no-results">No herbs found. Try a different search.</p>
+  </section>
+
+  <!-- ───── DETAIL MODAL ───── -->
+  <div id="plant-modal" class="modal hidden" onclick="closeModalOutside(event)">
+    <div class="modal-box" id="modal-box">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+
+      <div class="modal-hero" id="modal-hero">
+        <div class="modal-3d" id="modal-3d-container"></div>
+        <div class="modal-identity">
+          <span class="modal-emoji" id="m-emoji"></span>
+          <div>
+            <h2 class="modal-name" id="m-name"></h2>
+            <p class="modal-botanical" id="m-botanical"></p>
+            <div class="modal-tags" id="m-tags"></div>
+          </div>
+        </div>
+        <p class="modal-desc" id="m-desc"></p>
+      </div>
+
+      <div class="modal-body">
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="info-icon">🗺️</div>
+            <h4>Habitat</h4>
+            <p id="m-habitat"></p>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">⚕️</div>
+            <h4>Medical System</h4>
+            <p id="m-system"></p>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">🌾</div>
+            <h4>Parts Used</h4>
+            <p id="m-parts"></p>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">🪴</div>
+            <h4>Cultivation</h4>
+            <p id="m-cultivation"></p>
+          </div>
+        </div>
+
+        <div class="uses-section">
+          <h3>Medicinal Uses</h3>
+          <p id="m-uses"></p>
+        </div>
+
+        <div class="names-section">
+          <h3>Common Names</h3>
+          <div id="m-common-names" class="names-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── ABOUT AYUSH ───── -->
+  <section class="about-section" id="about">
+    <div class="about-inner">
+      <div class="about-text">
+        <p class="section-eyebrow">About the Initiative</p>
+        <h2>The AYUSH Ministry</h2>
+        <p>AYUSH — <strong>A</strong>yurveda, <strong>Y</strong>oga & Naturopathy, <strong>U</strong>nani, <strong>S</strong>iddha, and <strong>H</strong>omeopathy — represents India's rich legacy of traditional medicine systems with over 5,000 years of documented history.</p>
+        <p>This Virtual Herbal Garden initiative brings ancient botanical knowledge to the digital age, making it accessible, engaging, and scientifically enriching for students, researchers, and practitioners worldwide.</p>
+        <div class="ayush-pills">
+          <span class="ayush-pill">🌿 Ayurveda</span>
+          <span class="ayush-pill">🧘 Yoga & Naturopathy</span>
+          <span class="ayush-pill">🌙 Unani</span>
+          <span class="ayush-pill">✨ Siddha</span>
+          <span class="ayush-pill">💊 Homeopathy</span>
+        </div>
+      </div>
+      <div class="about-visual">
+        <div class="about-card">
+          <div class="about-card-icon">📜</div>
+          <h3>5000+ Years</h3>
+          <p>Of documented botanical medicine across ancient Indian texts</p>
+        </div>
+        <div class="about-card">
+          <div class="about-card-icon">🌍</div>
+          <h3>Global Reach</h3>
+          <p>Over 8,000 plant species documented in Ayurvedic pharmacopoeia</p>
+        </div>
+        <div class="about-card">
+          <div class="about-card-icon">🔬</div>
+          <h3>Modern Research</h3>
+          <p>Thousands of peer-reviewed studies validating traditional uses</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── GLOSSARY ───── -->
+  <section class="glossary-section" id="glossary">
+    <div class="glossary-inner">
+      <p class="section-eyebrow">Reference Guide</p>
+      <h2>Herbal Glossary</h2>
+      <div class="glossary-grid" id="glossary-grid"></div>
+    </div>
+  </section>
+
+  <!-- ───── FOOTER ───── -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">🌿</span>
+        <span class="footer-title">Vanaspati</span>
+      </div>
+      <p class="footer-tagline">Ancient wisdom, digitally preserved.</p>
+      <p class="footer-copy">© 2024 Virtual Herbal Garden · Ministry of AYUSH, Government of India</p>
+    </div>
+  </footer>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
